@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Samfundsøkonomi øvekort</title>
+<style>
+  :root {
+    --bg: #f6f5f1;
+    --surface: #ffffff;
+    --surface-2: #f0eee8;
+    --text: #1d1f23;
+    --muted: #62666d;
+    --border: #e2dfd7;
+    --accent: #2f5fd0;
+    --accent-soft: #e6edfb;
+    --good: #1f8a5b;
+    --good-soft: #e3f4eb;
+    --again: #c4621b;
+    --again-soft: #fbeee2;
+    --note-bg: #fff7df;
+    --note-border: #ecd38a;
+    --shadow: 0 1px 2px rgba(20,20,30,.05), 0 8px 24px rgba(20,20,30,.07);
+    --radius: 18px;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14161a;
+      --surface: #1d2025;
+      --surface-2: #262a31;
+      --text: #ecedef;
+      --muted: #9aa0a9;
+      --border: #30353d;
+      --accent: #7ea2ff;
+      --accent-soft: #232f4a;
+      --good: #4cc38a;
+      --good-soft: #17352a;
+      --again: #f0995a;
+      --again-soft: #3a2819;
+      --note-bg: #332c17;
+      --note-border: #5e5021;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14161a; --surface: #1d2025; --surface-2: #262a31; --text: #ecedef; --muted: #9aa0a9;
+    --border: #30353d; --accent: #7ea2ff; --accent-soft: #232f4a; --good: #4cc38a; --good-soft: #17352a;
+    --again: #f0995a; --again-soft: #3a2819; --note-bg: #332c17; --note-border: #5e5021;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35); color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 28px 16px 56px; }
+
+  header h1 { font-size: 1.6rem; line-height: 1.2; margin: 0 0 4px; letter-spacing: -0.01em; }
+  header p { margin: 0; color: var(--muted); }
+
+  /* Fremskridt */
+  .progress {
+    margin-top: 20px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow);
+  }
+  .progress-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .progress-count { font-size: 1.15rem; font-weight: 650; }
+  .progress-count span { color: var(--muted); font-weight: 500; font-size: 1rem; }
+  .progress-pct { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .bar { margin-top: 10px; height: 12px; border-radius: 99px; background: var(--surface-2); overflow: hidden; }
+  .bar > div { height: 100%; width: 0; border-radius: 99px; background: var(--good); transition: width .4s ease; }
+
+  /* Kontroller */
+  .controls { margin-top: 18px; display: grid; gap: 12px; }
+  .seg { display: inline-flex; background: var(--surface-2); border-radius: 12px; padding: 4px; gap: 4px; width: 100%; }
+  .seg button {
+    flex: 1; border: 0; background: transparent; color: var(--muted); font: inherit; font-weight: 600;
+    padding: 9px 12px; border-radius: 9px; cursor: pointer;
+  }
+  .seg button[aria-pressed="true"] { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    border: 1px solid var(--border); background: var(--surface); color: var(--text);
+    font: inherit; font-size: .9rem; padding: 6px 12px; border-radius: 99px; cursor: pointer;
+    display: inline-flex; gap: 6px; align-items: center;
+  }
+  .chip small { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .chip[aria-pressed="true"] small { color: rgba(255,255,255,.85); }
+
+  .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+  .toolbar-left { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .btn {
+    border: 1px solid var(--border); background: var(--surface); color: var(--text);
+    font: inherit; font-weight: 600; padding: 9px 14px; border-radius: 12px; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px; justify-content: center;
+  }
+  .btn:hover { border-color: var(--muted); }
+  .btn-ghost { border-color: transparent; background: transparent; color: var(--muted); font-weight: 500; }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn-primary:hover { filter: brightness(1.05); border-color: var(--accent); }
+  .btn-good { background: var(--good-soft); border-color: transparent; color: var(--good); }
+  .btn-again { background: var(--again-soft); border-color: transparent; color: var(--again); }
+  .btn-good:hover { border-color: var(--good); }
+  .btn-again:hover { border-color: var(--again); }
+  .toggle { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: .95rem; cursor: pointer; user-select: none; }
+  .toggle input { width: 18px; height: 18px; accent-color: var(--accent); margin: 0; }
+
+  button:focus-visible, textarea:focus-visible, .card:focus-visible, input:focus-visible {
+    outline: 3px solid var(--accent); outline-offset: 2px;
+  }
+
+  /* Status-linje */
+  .status { margin-top: 22px; display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-size: .9rem; flex-wrap: wrap; }
+
+  /* Kort */
+  .stage { margin-top: 8px; }
+  .card-wrap { perspective: 1400px; }
+  .card { display: grid; transform-style: preserve-3d; transition: transform .55s cubic-bezier(.2,.7,.2,1); cursor: pointer; border-radius: var(--radius); }
+  .card.flipped { transform: rotateY(180deg); }
+  .face {
+    grid-area: 1 / 1; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 22px 22px 20px; min-height: 270px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .face.back { transform: rotateY(180deg); background: var(--surface); }
+  .meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: .82rem; }
+  .tag { background: var(--accent-soft); color: var(--accent); padding: 3px 10px; border-radius: 99px; font-weight: 600; }
+  .num { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .badge { padding: 3px 10px; border-radius: 99px; font-weight: 600; }
+  .badge.good { background: var(--good-soft); color: var(--good); }
+  .badge.again { background: var(--again-soft); color: var(--again); }
+  .question { font-size: 1.35rem; line-height: 1.35; font-weight: 650; margin: 0; letter-spacing: -0.005em; }
+  .face .grow { flex: 1; display: flex; align-items: center; }
+  .hint { color: var(--muted); font-size: .9rem; margin: 0; }
+  .label { font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; margin: 0; }
+  .answer { font-size: 1.08rem; margin: 0; }
+  .q-small { font-size: .95rem; color: var(--muted); margin: 0; }
+  .note {
+    margin: 0; background: var(--note-bg); border: 1px solid var(--note-border); border-radius: 10px;
+    padding: 8px 12px; font-size: .9rem;
+  }
+
+  .actions { margin-top: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .actions .btn { padding: 13px 14px; font-size: 1rem; }
+  .actions.single { grid-template-columns: 1fr; }
+
+  /* Quiz */
+  .panel {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 22px; display: flex; flex-direction: column; gap: 14px;
+  }
+  textarea {
+    width: 100%; min-height: 130px; resize: vertical; font: inherit; color: var(--text);
+    background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px;
+  }
+  .compare { display: grid; gap: 12px; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .compare { grid-template-columns: 1fr 1fr; } }
+  .box { border-radius: 12px; padding: 14px; border: 1px solid var(--border); background: var(--bg); display: flex; flex-direction: column; gap: 8px; }
+  .box.model { background: var(--accent-soft); border-color: transparent; }
+  .box p.user { white-space: pre-wrap; margin: 0; overflow-wrap: anywhere; }
+  .box p.empty { color: var(--muted); font-style: italic; margin: 0; }
+
+  /* Færdig-skærm */
+  .done { text-align: center; padding: 36px 22px; }
+  .done h2 { margin: 0 0 6px; font-size: 1.4rem; }
+  .done p { margin: 0 auto 18px; color: var(--muted); max-width: 460px; }
+  .done .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+  .shortcuts { margin-top: 18px; color: var(--muted); font-size: .82rem; text-align: center; }
+  kbd { font: inherit; font-size: .78rem; border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 6px; padding: 0 6px; background: var(--surface); }
+  @media (hover: none) { .shortcuts { display: none; } }
+
+  @media (max-width: 480px) {
+    header h1 { font-size: 1.35rem; }
+    .question { font-size: 1.2rem; }
+    .face, .panel { padding: 18px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card, .bar > div { transition: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Test i international økonomi</h1>
+    <p>50 spørgsmål med korte svar</p>
+  </header>
+
+  <section class="progress" aria-label="Fremskridt">
+    <div class="progress-top">
+      <div class="progress-count" id="progCount">0 af 50 <span>kan du</span></div>
+      <div class="progress-pct" id="progPct">0 %</div>
+    </div>
+    <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="50" aria-valuenow="0" id="progBar"><div id="progFill"></div></div>
+  </section>
+
+  <section class="controls">
+    <div class="seg" role="group" aria-label="Tilstand">
+      <button type="button" data-mode="flash">Flashcards</button>
+      <button type="button" data-mode="quiz">Quiz</button>
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="Emne"></div>
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <button type="button" class="btn" id="shuffleBtn" title="Bland rækkefølgen">⤨ Bland</button>
+        <label class="toggle"><input type="checkbox" id="hideKnown"> Spring over dem jeg kan</label>
+      </div>
+      <button type="button" class="btn btn-ghost" id="resetBtn">Nulstil fremskridt</button>
+    </div>
+  </section>
+
+  <div class="status" id="status" aria-live="polite"></div>
+  <main class="stage" id="stage"></main>
+
+  <p class="shortcuts">Genveje: <kbd>Mellemrum</kbd> vend kort · <kbd>1</kbd> Kunne det · <kbd>2</kbd> Øv igen · <kbd>Ctrl/⌘ + Enter</kbd> tjek svar</p>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var TOPICS = [
+    { id: "konj", name: "Konjunkturer" },
+    { id: "maal", name: "Økonomiske mål og BNP" },
+    { id: "eu",   name: "Efterspørgsel og udbud" },
+    { id: "arb",  name: "Arbejdsmarked" },
+    { id: "off",  name: "Offentlig sektor og skat" },
+    { id: "vel",  name: "Velfærd og fremtid" }
+  ];
+
+  var CHECK_NOTE = "Tjek det aktuelle tal/regel i dit undervisningsmateriale.";
+
+  var Q = [
+    { n: 1, t: "konj", q: "Hvad forstår man ved højkonjunktur?",
+      a: "En periode, hvor økonomien vokser hurtigt. BNP stiger mere end normalt, og der er høj produktion og beskæftigelse." },
+    { n: 2, t: "konj", q: "Hvordan går det med import og arbejdsløshed under en højkonjunktur?",
+      a: "Importen stiger, fordi folk tjener og forbruger mere. Arbejdsløsheden falder, fordi virksomhederne mangler arbejdskraft." },
+    { n: 3, t: "konj", q: "Hvad forstår man ved lavkonjunktur?",
+      a: "En periode med lav eller negativ vækst. Produktion og forbrug falder, og arbejdsløsheden stiger." },
+    { n: 4, t: "konj", q: "Hvor meget stiger BNP med om året under en stabil økonomisk udvikling?",
+      a: "Cirka 2 % om året.", check: true },
+    { n: 5, t: "konj", q: "Gør kort rede for, hvorfor kraftigt stigende oliepriser ofte fremkalder økonomisk krise?",
+      a: "Olie bruges i næsten al produktion og transport, så omkostningerne stiger. Det giver inflation, så forbrugerne kan købe mindre. Efterspørgslen falder, og virksomhederne skærer ned og fyrer." },
+    { n: 6, t: "konj", q: "Hvad kan påvirke et lands konkurrenceevne negativt?",
+      a: "Høje lønninger, lav produktivitet, høj inflation, høje skatter, en dyr valuta og et lavt uddannelsesniveau." },
+    { n: 7, t: "konj", q: "Nævn to af de fire lande som blev hårdest ramt af eurokrisen?",
+      a: "Grækenland og Spanien (også Portugal og Irland)." },
+    { n: 8, t: "maal", q: "Nævn tre af de seks samfundsøkonomiske mål.",
+      a: "Høj økonomisk vækst, lav ledighed og stabile priser. De andre er balance på betalingsbalancen, balance på de offentlige finanser og en rimelig indkomstfordeling." },
+    { n: 9, t: "maal", q: "Hvad forstår man ved en målkonflikt?",
+      a: "Når to mål er svære at nå samtidig, fordi man ved at nå det ene ofte kommer længere væk fra det andet. Fx lav ledighed og stabile priser." },
+    { n: 10, t: "maal", q: "Hvorfor forringes betalingsbalancen ofte, når arbejdsløsheden falder?",
+      a: "Når flere er i arbejde, køber folk mere – også udenlandske varer – så importen stiger. Lønningerne stiger også, så vores varer bliver dyrere og eksporten falder." },
+    { n: 11, t: "konj", q: "Hvornår har Danmark sidst haft økonomisk krise?",
+      a: "Finanskrisen i 2008–2009. (Der var også et kort fald under coronakrisen i 2020.)", check: true },
+    { n: 12, t: "maal", q: "Hvad forstår man ved BNP?",
+      a: "Bruttonationalproduktet: værdien af alle varer og tjenester, der produceres i et land på et år." },
+    { n: 13, t: "maal", q: "Hvilke problemer er der forbundet med at anvende BNP pr. indbygger som velstandsmål?",
+      a: "BNP siger intet om, hvordan indkomsten er fordelt. Fritid, husarbejde, sort arbejde, miljøskader og trivsel tælles ikke med." },
+    { n: 14, t: "maal", q: "Hvad opnår man, når man beregner BNP i faste priser?",
+      a: "Man fjerner effekten af inflation og kan se den reelle vækst i produktionen over tid." },
+    { n: 15, t: "maal", q: "Hvordan måler man økonomisk vækst?",
+      a: "Som den procentvise ændring i det reelle BNP (BNP i faste priser) fra ét år til det næste." },
+    { n: 16, t: "eu", q: "Nævn nogle faktorer, der påvirker efterspørgslen efter en vare.",
+      a: "Varens pris, indkomsten, priser på substitutter og komplementære varer, smag og mode, forventninger og antallet af forbrugere." },
+    { n: 17, t: "eu", q: "Hvorfor falder efterspørgslen, når prisen stiger?",
+      a: "Varen bliver dyrere i forhold til andre varer, og folk har råd til mindre. Mange skifter til billigere substitutter eller køber mindre." },
+    { n: 18, t: "eu", q: "Hvad vil det sige, at efterspørgslen efter en given vare er priselastisk?",
+      a: "Efterspørgslen er meget følsom over for prisændringer: ændres prisen 1 %, ændres mængden mere end 1 %." },
+    { n: 19, t: "eu", q: "Nævn nogle af de faktorer, der påvirker en vares elasticitet.",
+      a: "Om der findes substitutter, om varen er en nødvendighed eller luksus, hvor stor en del af indkomsten den udgør, og hvor lang tid forbrugerne har til at tilpasse sig." },
+    { n: 20, t: "eu", q: "Hvad er begrundelsen for, at udbuddet af en vare stiger, når prisen stiger?",
+      a: "Det bliver mere rentabelt at producere, så virksomhederne producerer mere. Nye virksomheder kan også komme ind på markedet." },
+    { n: 21, t: "eu", q: "Hvad forstår man ved fuldkommen konkurrence?",
+      a: "Mange købere og sælgere, ens (homogene) varer, fuld information og fri adgang til markedet – ingen enkelt kan påvirke prisen." },
+    { n: 22, t: "maal", q: "Forklar i princippet, hvorledes forbrugerprisindekset beregnes.",
+      a: "Man sammensætter en varekurv med det, en gennemsnitsfamilie køber, og finder prisen i et basisår og i dag. Prisen i dag divideres med prisen i basisåret og ganges med 100." },
+    { n: 23, t: "eu", q: "Hvad påvirker det private forbrug? Nævn mindst to faktorer.",
+      a: "Den disponible indkomst og renten. Også formue, forventninger/forbrugertillid, priser og skatter." },
+    { n: 24, t: "maal", q: "Hvad viser en gini-koefficient på henholdsvis 0,28 og 0,37 om indkomstfordelingen i to lande?",
+      a: "Jo tættere på 0, jo mere lige fordeling. Landet med 0,28 er mere lige end landet med 0,37, hvor uligheden er større." },
+    { n: 25, t: "arb", q: "Hvordan opgøres arbejdsstyrken?",
+      a: "Beskæftigede + ledige (dem der aktivt søger job)." },
+    { n: 26, t: "arb", q: "Hvad ligger den registrerede ledighedsprocent på i Danmark i disse år?",
+      a: "Cirka 3 %.", check: true },
+    { n: 27, t: "arb", q: "Hvad forstår man ved fuld beskæftigelse?",
+      a: "At alle, der kan og vil arbejde, har et job. Der er kun den uundgåelige ledighed (friktions- og strukturledighed)." },
+    { n: 28, t: "arb", q: "Hvad er en flaskehals på arbejdsmarkedet?",
+      a: "Mangel på en bestemt type arbejdskraft, fx faglærte eller IT-folk, selvom der er ledighed andre steder. Det kan presse lønningerne op." },
+    { n: 29, t: "arb", q: "Hvad forstår man ved den danske arbejdsmarkedsmodel?",
+      a: "Arbejdsgiver- og lønmodtagerorganisationerne aftaler selv løn og vilkår i overenskomster med kun lidt indblanding fra staten. Kaldes også aftalemodellen." },
+    { n: 30, t: "off", q: "Hvad omfatter den offentlige sektor?",
+      a: "Stat, regioner og kommuner." },
+    { n: 31, t: "off", q: "Hvorledes kan den offentlige sektors størrelse måles? Nævn én af de tre måder.",
+      a: "Offentlige udgifter i % af BNP. (De andre: offentlig beskæftigelse i % af den samlede beskæftigelse og skattetrykket.)" },
+    { n: 32, t: "off", q: "Nævn eksempler på forskellige overførselsindkomster.",
+      a: "Folkepension, dagpenge, kontanthjælp, SU og børnecheck." },
+    { n: 33, t: "off", q: "Hvad forstås ved offentlige serviceydelser?",
+      a: "Ydelser, det offentlige leverer gratis eller billigt, betalt over skatten. Fx sundhed, uddannelse, børnepasning, ældrepleje og politi." },
+    { n: 34, t: "off", q: "Hvem styrer de offentlige udgifter?",
+      a: "Folketinget og regeringen styrer statens udgifter via finansloven. Kommuner og regioner styrer deres egne budgetter." },
+    { n: 35, t: "off", q: "Hvorfra får den offentlige sektor sine indtægter?",
+      a: "Hovedsageligt skatter og afgifter. Derudover renteindtægter, overskud fra offentlige virksomheder og gebyrer." },
+    { n: 36, t: "off", q: "Giv to eksempler på direkte skatter.",
+      a: "Indkomstskat og selskabsskat (også ejendomsskat)." },
+    { n: 37, t: "off", q: "Og to eksempler på indirekte skatter.",
+      a: "Moms og punktafgifter (fx på cigaretter, alkohol og benzin)." },
+    { n: 38, t: "off", q: "Hvad menes med en progressiv skatteskala?",
+      a: "At skatteprocenten stiger, jo mere man tjener. De rige betaler altså en større andel af deres indkomst i skat end de fattige." },
+    { n: 39, t: "off", q: "Efter hvilken skala opkræves statsskatten?",
+      a: "Efter en progressiv skala med bundskat og topskat (fra 2026 også mellemskat og toptopskat). De højere skatter betales kun af den del af indkomsten, der ligger over grænserne.", check: true },
+    { n: 40, t: "off", q: "Hvad er en marginalskatteprocent?",
+      a: "Skatten af den sidst tjente krone – altså hvor meget af en ekstra krone, man skal aflevere i skat." },
+    { n: 41, t: "off", q: "Hvad menes med skatternes fordelingsvirkning?",
+      a: "At skat og overførsler udjævner indkomstforskelle. Progressiv skat gør, at de rige betaler mere, og pengene bruges bl.a. til at hjælpe dem med lave indkomster." },
+    { n: 42, t: "vel", q: "Hvad er karakteristisk for den danske velfærdsmodel?",
+      a: "Høje skatter finansierer en stor offentlig sektor. Ydelser som sundhed og uddannelse er for alle (universelle), og der er høj lighed og tryghed." },
+    { n: 43, t: "vel", q: "På hvilken måde vil globaliseringen kunne presse den danske velfærdsstat?",
+      a: "Virksomheder og højtlønnede kan flytte til lande med lavere skat, så skattegrundlaget falder. Konkurrence fra lavtlønslande kan koste danske job, så flere kommer på overførselsindkomst." },
+    { n: 44, t: "vel", q: "Hvilke ændringer sker der i fremtiden i aldersfordelingen i Danmark?",
+      a: "Flere ældre og færre i den arbejdsdygtige alder. Forsørgerbyrden stiger, fordi færre skal forsørge flere." },
+    { n: 45, t: "vel", q: "Hvad skyldes disse ændringer i aldersfordelingen?",
+      a: "Vi lever længere, der fødes færre børn, og de store efterkrigsårgange går på pension." },
+    { n: 46, t: "off", q: "Hvordan kan man finansiere et underskud på statsfinanserne?",
+      a: "Ved at låne (sælge statsobligationer), bruge af opsparingen, hæve skatterne eller skære i de offentlige udgifter." },
+    { n: 47, t: "arb", q: "Hvad er mobilitetsfremmende foranstaltninger på arbejdsmarkedet?",
+      a: "Tiltag, der gør det lettere at skifte job, branche eller bopæl. Fx omskoling, efteruddannelse, jobformidling og krav om at tage et job." },
+    { n: 48, t: "arb", q: "Hvorledes kan efterspørgslen på arbejdskraft påvirkes?",
+      a: "Ved at øge efterspørgslen i økonomien, fx skattelettelser eller flere offentlige investeringer. Også via lavere lønomkostninger eller løntilskud." },
+    { n: 49, t: "arb", q: "Hvorledes kan udbuddet af arbejdskraft påvirkes?",
+      a: "Ved at gøre det mere attraktivt at arbejde, fx skattelettelser eller lavere/kortere dagpenge. Også ved at hæve pensionsalderen, uddanne flere og tillade mere arbejdskraftindvandring." },
+    { n: 50, t: "arb", q: "Hvad kendetegner flexicurity-modellen?",
+      a: "Et fleksibelt arbejdsmarked (nemt at ansætte og fyre), økonomisk tryghed (dagpenge) og en aktiv arbejdsmarkedspolitik (aktivering og uddannelse). Kaldes den gyldne trekant." }
+  ];
+
+  var TOTAL = Q.length;
+  var byN = {};
+  Q.forEach(function (q) { byN[q.n] = q; });
+  var topicName = {};
+  TOPICS.forEach(function (t) { topicName[t.id] = t.name; });
+
+  /* ---------- Lagring ---------- */
+  var KEY = "hhx-samfundsoekonomi-50-v1";
+  function defaults() { return { progress: {}, mode: "flash", topic: "all", hideKnown: true }; }
+  function load() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (raw) {
+        var s = JSON.parse(raw);
+        if (s && typeof s === "object") {
+          var d = defaults();
+          for (var k in d) if (Object.prototype.hasOwnProperty.call(s, k)) d[k] = s[k];
+          if (!d.progress || typeof d.progress !== "object") d.progress = {};
+          return d;
+        }
+      }
+    } catch (e) {}
+    return defaults();
+  }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} }
+
+  var store = load();
+
+  /* ---------- Session-tilstand ---------- */
+  var queue = [];          // numre på de kort, der er tilbage i runden
+  var revealed = false;    // er kortet vendt / svaret tjekket
+  var draft = "";          // quiz-svar for det aktuelle kort
+  var roundSize = 0;
+
+  function isKnown(n) { return !!(store.progress[n] && store.progress[n].k); }
+  function againCount(n) { return (store.progress[n] && store.progress[n].a) || 0; }
+  function inTopic(q) { return store.topic === "all" || q.t === store.topic; }
+
+  function buildQueue(which) {
+    // which: "default" | "unknown" | "all"
+    var pool = Q.filter(inTopic);
+    if (which === "unknown" || (which !== "all" && store.hideKnown)) {
+      pool = pool.filter(function (q) { return !isKnown(q.n); });
+    }
+    queue = pool.map(function (q) { return q.n; });
+    roundSize = queue.length;
+    resetCard();
+    render();
+  }
+
+  function resetCard() { revealed = false; draft = ""; }
+
+  function shuffle(arr) {
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+    }
+    return arr;
+  }
+
+  function rate(knew) {
+    if (!queue.length || !revealed) return;
+    var n = queue.shift();
+    var p = store.progress[n] || { k: false, a: 0 };
+    if (knew) {
+      p.k = true;
+    } else {
+      p.k = false;
+      p.a = (p.a || 0) + 1;
+      // Kom igen efter ca. 3 andre kort – oftere jo færre der er tilbage
+      queue.splice(Math.min(3, queue.length), 0, n);
+    }
+    store.progress[n] = p;
+    save();
+    resetCard();
+    render();
+  }
+
+  /* ---------- Rendering ---------- */
+  var $ = function (id) { return document.getElementById(id); };
+  var stage = $("stage");
+
+  function el(tag, attrs, children) {
+    var e = document.createElement(tag);
+    if (attrs) for (var k in attrs) {
+      if (k === "class") e.className = attrs[k];
+      else if (k === "text") e.textContent = attrs[k];
+      else if (k.slice(0, 2) === "on") e.addEventListener(k.slice(2), attrs[k]);
+      else e.setAttribute(k, attrs[k]);
+    }
+    (children || []).forEach(function (c) { if (c) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return e;
+  }
+
+  function renderProgress() {
+    var known = Q.filter(function (q) { return isKnown(q.n); }).length;
+    var pct = Math.round(known / TOTAL * 100);
+    $("progCount").innerHTML = known + " af " + TOTAL + " <span>kan du</span>";
+    $("progPct").textContent = pct + " %";
+    $("progFill").style.width = pct + "%";
+    $("progBar").setAttribute("aria-valuenow", known);
+  }
+
+  function renderChips() {
+    var wrap = $("chips");
+    wrap.innerHTML = "";
+    var list = [{ id: "all", name: "Alle emner" }].concat(TOPICS);
+    list.forEach(function (t) {
+      var qs = Q.filter(function (q) { return t.id === "all" || q.t === t.id; });
+      var k = qs.filter(function (q) { return isKnown(q.n); }).length;
+      var b = el("button", { type: "button", class: "chip", "aria-pressed": String(store.topic === t.id) },
+        [t.name, el("small", { text: k + "/" + qs.length })]);
+      b.addEventListener("click", function () {
+        if (store.topic === t.id) return;
+        store.topic = t.id; save(); buildQueue("default");
+      });
+      wrap.appendChild(b);
+    });
+  }
+
+  function renderMode() {
+    document.querySelectorAll(".seg button").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b.dataset.mode === store.mode));
+    });
+    $("hideKnown").checked = !!store.hideKnown;
+  }
+
+  function metaRow(q) {
+    var row = el("div", { class: "meta" }, [
+      el("span", { class: "tag", text: topicName[q.t] }),
+      el("span", { class: "num", text: "Spørgsmål " + q.n })
+    ]);
+    if (isKnown(q.n)) row.appendChild(el("span", { class: "badge good", text: "Kan du ✓" }));
+    else if (againCount(q.n) > 0) row.appendChild(el("span", { class: "badge again", text: "Øvet igen " + againCount(q.n) + "×" }));
+    return row;
+  }
+
+  function answerBlock(q) {
+    var frag = document.createDocumentFragment();
+    frag.appendChild(el("p", { class: "answer", text: q.a }));
+    if (q.check) frag.appendChild(el("p", { class: "note", text: "⚠︎ " + CHECK_NOTE }));
+    return frag;
+  }
+
+  function ratingButtons() {
+    return el("div", { class: "actions" }, [
+      el("button", { type: "button", class: "btn btn-good", onclick: function () { rate(true); } }, ["✓ Kunne det"]),
+      el("button", { type: "button", class: "btn btn-again", onclick: function () { rate(false); } }, ["↻ Øv igen"])
+    ]);
+  }
+
+  function renderStatus() {
+    var s = $("status");
+    s.innerHTML = "";
+    if (!queue.length) return;
+    var left = queue.length;
+    var uniqueLeft = {};
+    queue.forEach(function (n) { uniqueLeft[n] = 1; });
+    s.appendChild(el("span", { text: (store.topic === "all" ? "Alle emner" : topicName[store.topic]) }));
+    s.appendChild(el("span", { text: "Tilbage i runden: " + Object.keys(uniqueLeft).length + " af " + roundSize }));
+  }
+
+  function renderFlash(q) {
+    var front = el("div", { class: "face front" }, [
+      metaRow(q),
+      el("div", { class: "grow" }, [el("p", { class: "question", text: q.q })]),
+      el("p", { class: "hint", text: "Tænk over dit svar – tryk på kortet for at vende det." })
+    ]);
+    var backChildren = [
+      metaRow(q),
+      el("p", { class: "q-small", text: q.q }),
+      el("p", { class: "label", text: "Modelsvar" })
+    ];
+    var back = el("div", { class: "face back" }, backChildren);
+    back.appendChild(answerBlock(q));
+
+    var card = el("div", {
+      class: "card" + (revealed ? " flipped" : ""), tabindex: "0", role: "button",
+      "aria-label": revealed ? "Kortet er vendt. Tryk for at se spørgsmålet igen." : "Vend kortet og se modelsvaret"
+    }, [front, back]);
+    card.addEventListener("click", flip);
+    card.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.stopPropagation(); flip(); }
+    });
+
+    stage.appendChild(el("div", { class: "card-wrap" }, [card]));
+    if (revealed) {
+      stage.appendChild(ratingButtons());
+    } else {
+      stage.appendChild(el("div", { class: "actions single" }, [
+        el("button", { type: "button", class: "btn btn-primary", onclick: flip }, ["Vend kort"])
+      ]));
+    }
+  }
+
+  function flip() {
+    revealed = !revealed;
+    var card = stage.querySelector(".card");
+    if (card) card.classList.toggle("flipped", revealed);
+    // Opdater knapper uden at genopbygge kortet, så vende-animationen kører
+    var old = stage.querySelector(".actions");
+    if (old) old.remove();
+    if (revealed) stage.appendChild(ratingButtons());
+    else stage.appendChild(el("div", { class: "actions single" }, [
+      el("button", { type: "button", class: "btn btn-primary", onclick: flip }, ["Vend kort"])
+    ]));
+    if (card) card.setAttribute("aria-label", revealed ? "Kortet er vendt. Tryk for at se spørgsmålet igen." : "Vend kortet og se modelsvaret");
+  }
+
+  function renderQuiz(q) {
+    var panel = el("div", { class: "panel" }, [
+      metaRow(q),
+      el("p", { class: "question", text: q.q })
+    ]);
+    if (!revealed) {
+      var ta = el("textarea", { id: "answerInput", placeholder: "Skriv dit svar her …", "aria-label": "Dit svar" });
+      ta.value = draft;
+      ta.addEventListener("input", function () { draft = ta.value; });
+      ta.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); check(); }
+      });
+      panel.appendChild(ta);
+      stage.appendChild(panel);
+      stage.appendChild(el("div", { class: "actions single" }, [
+        el("button", { type: "button", class: "btn btn-primary", onclick: check }, ["Tjek"])
+      ]));
+      setTimeout(function () { if (window.matchMedia("(hover: hover)").matches) ta.focus(); }, 0);
+    } else {
+      var mine = el("div", { class: "box" }, [el("p", { class: "label", text: "Dit svar" })]);
+      if (draft.trim()) mine.appendChild(el("p", { class: "user", text: draft.trim() }));
+      else mine.appendChild(el("p", { class: "empty", text: "Du skrev ikke noget svar." }));
+      var model = el("div", { class: "box model" }, [el("p", { class: "label", text: "Modelsvar" })]);
+      model.appendChild(answerBlock(q));
+      panel.appendChild(el("div", { class: "compare" }, [mine, model]));
+      panel.appendChild(el("p", { class: "hint", text: "Sammenlign selv: fik du de vigtigste pointer med?" }));
+      stage.appendChild(panel);
+      stage.appendChild(ratingButtons());
+    }
+  }
+
+  function check() {
+    var ta = $("answerInput");
+    if (ta) draft = ta.value;
+    revealed = true;
+    render();
+  }
+
+  function renderDone() {
+    var pool = Q.filter(inTopic);
+    var known = pool.filter(function (q) { return isKnown(q.n); }).length;
+    var allKnown = known === pool.length;
+    var title = allKnown ? "Du kan dem alle! 🎉" : "Runden er færdig";
+    var text = allKnown
+      ? "Du har markeret alle " + pool.length + " spørgsmål i " + (store.topic === "all" ? "alle emner" : "“" + topicName[store.topic] + "”") + " som “Kunne det”. Gennemgå dem igen for at holde dem friske."
+      : "Du kan " + known + " af " + pool.length + " spørgsmål her. Øv de resterende " + (pool.length - known) + " igen – eller tag hele bunken.";
+    var row = el("div", { class: "row" });
+    if (!allKnown) row.appendChild(el("button", { type: "button", class: "btn btn-primary", onclick: function () { buildQueue("unknown"); } }, ["Øv dem jeg ikke kan"]));
+    row.appendChild(el("button", { type: "button", class: "btn" + (allKnown ? " btn-primary" : ""), onclick: function () { buildQueue("all"); } }, ["Gennemgå alle igen"]));
+    stage.appendChild(el("div", { class: "panel done" }, [el("h2", { text: title }), el("p", { text: text }), row]));
+  }
+
+  function render() {
+    renderProgress();
+    renderChips();
+    renderMode();
+    renderStatus();
+    stage.innerHTML = "";
+    if (!queue.length) { renderDone(); return; }
+    var q = byN[queue[0]];
+    if (store.mode === "quiz") renderQuiz(q); else renderFlash(q);
+  }
+
+  /* ---------- Hændelser ---------- */
+  document.querySelectorAll(".seg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      if (store.mode === b.dataset.mode) return;
+      store.mode = b.dataset.mode; save(); resetCard(); render();
+    });
+  });
+
+  $("shuffleBtn").addEventListener("click", function () {
+    if (queue.length < 2) return;
+    shuffle(queue);
+    resetCard();
+    render();
+  });
+
+  $("hideKnown").addEventListener("change", function (e) {
+    store.hideKnown = e.target.checked; save(); buildQueue("default");
+  });
+
+  $("resetBtn").addEventListener("click", function () {
+    if (!confirm("Vil du nulstille dit fremskridt? Alle markeringer “Kunne det” og “Øv igen” slettes.")) return;
+    store.progress = {}; save(); buildQueue("default");
+  });
+
+  document.addEventListener("keydown", function (e) {
+    var tag = (e.target && e.target.tagName) || "";
+    if (tag === "TEXTAREA" || tag === "INPUT" || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (!queue.length) return;
+    if (e.key === " " && store.mode === "flash" && !(e.target && e.target.closest && e.target.closest("button"))) {
+      e.preventDefault(); flip();
+    } else if (e.key === "1" && revealed) {
+      rate(true);
+    } else if (e.key === "2" && revealed) {
+      rate(false);
+    }
+  });
+
+  buildQueue("default");
+})();
+</script>
+</body>
+</html>
